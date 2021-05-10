@@ -51,7 +51,7 @@ public class ClienteRest {
 		return ResponseEntity.of(cliente);
 	}
 	
-	@GetMapping(path = "razonSocial/{id}")
+	@GetMapping(path = "/razonSocial/{id}")
 	public ResponseEntity<Cliente> clientePorRazonSocial(@PathVariable(required = false) String razonSocial) {
 		Optional<Cliente> cliente = listaClientes.stream().filter(i -> i.getRazonSocial().equals(razonSocial)).findFirst();
 		return ResponseEntity.of(cliente);

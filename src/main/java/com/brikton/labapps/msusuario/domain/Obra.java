@@ -9,6 +9,7 @@ public class Obra {
 	private String direccion;
 	private Integer superficie;
 	private TipoObra tipo;
+	private Cliente cliente;
 	
 	public Integer getId() {
 		return id;
@@ -51,5 +52,11 @@ public class Obra {
 	}
 	public void setTipo(TipoObra tipo) {
 		this.tipo = tipo;
+	}
+	public Cliente getCliente() {
+		return cliente;
+	}
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 }
