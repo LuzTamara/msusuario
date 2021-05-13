@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.stream.IntStream;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,86 +19,86 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brikton.labapps.msusuario.domain.Cliente;
+import com.brikton.labapps.msusuario.servicioInterfaz.ClienteServicio;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/api/cliente")
-@Api(value = "ClienteRest", description = "Permite gestionar los clientes de la empresa")
 public class ClienteRest {
 
-	private static final List<Cliente> listaClientes = new ArrayList<>();
-	private static Integer ID_GEN = 1;
+	@Autowired
+	ClienteServicio clienteServicio;
 	
 	@GetMapping(path = "/{id}")
-	@ApiOperation(value = "Busca un cliente por su id")
-	public ResponseEntity<Cliente> clientePorId(@PathVariable Integer id) {
+	public ResponseEntity<?> clientePorId(@PathVariable Integer id) {
 		
-		Optional<Cliente> c = listaClientes
-				.stream().filter(cliente -> cliente.getId().equals(id)).findFirst();
-		return ResponseEntity.of(c);
+		Optional<Cliente> cliente = null;
+		try {
+			cliente = this.clienteServicio.buscarClientePorId(id);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
+			return ResponseEntity.of(cliente);
 	}
 	
 	@GetMapping
 	public ResponseEntity<List<Cliente>> todos() {
-		 return ResponseEntity.ok(listaClientes);
+		 return ResponseEntity.ok(this.clienteServicio.listarClientes());
 	}
 	
-	@GetMapping(path = "/cuit/{id}")
-	public ResponseEntity<Cliente> clientePorCuit(@PathVariable Integer id) {
-		Optional<Cliente> cliente = listaClientes.stream().filter(i -> i.getCuit().equals(cuit)).findFirst();
-		return ResponseEntity.of(cliente);
+	@GetMapping(path = "/cuit/{cuit}")
+	public ResponseEntity<?> clientePorCuit(@PathVariable String cuit) {
+		Optional<Cliente> cliente = null;
+		try {
+			cliente = this.clienteServicio.buscarClientePorCuit(cuit);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
+			return ResponseEntity.of(cliente);
 	}
 	
-	@GetMapping(path = "/razonSocial/{id}")
-	public ResponseEntity<Cliente> clientePorRazonSocial(@PathVariable(required = false) String razonSocial) {
-		Optional<Cliente> cliente = listaClientes.stream().filter(i -> i.getRazonSocial().equals(razonSocial)).findFirst();
-		return ResponseEntity.of(cliente);
+	@GetMapping(path = "/razonSocial/{razonSocial}")
+	public ResponseEntity<?> clientePorRazonSocial(@PathVariable(required = false) String razonSocial) {
+		Optional<Cliente> cliente = null;
+		try {
+			cliente = this.clienteServicio.buscarClientePorRazonSocial(razonSocial);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
+			return ResponseEntity.of(cliente);
 	}
 	
 	@PostMapping
-	public ResponseEntity<Cliente> crear(@RequestBody Cliente cliente) {
-		System.out.println(" crear cliente"+cliente);
-		cliente.setId(ID_GEN++);
-		listaClientes.add(cliente);
-		return ResponseEntity.ok(cliente);
+	public ResponseEntity<?> crear(@RequestBody Cliente cliente) {
+		Cliente creado = null;
+		try {
+			creado = this.clienteServicio.guardarCliente(cliente);
+		} catch (Exception e1) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e1.getMessage());
+		}
+		return ResponseEntity.ok(creado);
 	}
 	
 	@PutMapping(path = "/{id}")
-	@ApiOperation(value = "Actualiza un cliente")
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Actualizado correctamente"),
-			@ApiResponse(code = 401, message = "No autorizado"),
-			@ApiResponse(code = 403, message = "Prohibido"),
-			@ApiResponse(code = 404, message = "El ID no existe")
-	})
-	public ResponseEntity<Cliente> actualizar(@RequestBody Cliente cliente,
+	public ResponseEntity<?> actualizar(@RequestBody Cliente cliente,
 											  @PathVariable Integer id) {
-		OptionalInt indexOpt = IntStream.range(0,  listaClientes.size())
-				.filter(i -> listaClientes.get(i).getId().equals(id))
-				.findFirst();
-		if(indexOpt.isPresent()) {
-			listaClientes.set(indexOpt.getAsInt(), cliente);
-			return ResponseEntity.ok(cliente);
-		} else {
-			return ResponseEntity.notFound().build();
+		Cliente actualizado = null;
+		try {
+			actualizado = this.clienteServicio.guardarCliente(cliente);
+		} catch (Exception e1) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e1.getMessage());
 		}
+		return ResponseEntity.ok(actualizado);
 	}
 
 	
 	@DeleteMapping(path = "/{id}")
-	public ResponseEntity<Cliente> borrar(@PathVariable Integer id) {
-		OptionalInt indexOpt = IntStream.range(0,  listaClientes.size())
-				.filter(i -> listaClientes.get(i).getId().equals(id))
-				.findFirst();
-		if(indexOpt.isPresent()) {
-			listaClientes.remove(indexOpt.getAsInt());
-			return ResponseEntity.ok().build();
-		} else {
-			return ResponseEntity.notFound().build();
+	public ResponseEntity<?> borrar(@PathVariable Integer id) {
+		try {
+			this.clienteServicio.bajaCliente(id); 
+		} catch (Exception e1) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e1.getMessage());
 		}
+		return ResponseEntity.ok().build();
 	}
 }

@@ -1,5 +1,6 @@
 package com.brikton.labapps.msusuario.domain;
 
+import java.util.Date;
 import java.util.List;
 
 public class Cliente {
@@ -9,6 +10,8 @@ public class Cliente {
 	private String cuit;
 	private String mail;
 	private Double maxCuentaCorriente;
+	private Date fechaBaja;
+	
 	public String getRazonSocial() {
 		return razonSocial;
 	}
@@ -53,6 +56,12 @@ public class Cliente {
 	}
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	public Date getFechaBaja() {
+		return fechaBaja;
+	}
+	public void setFechaBaja(Date fechaBaja) {
+		this.fechaBaja = fechaBaja;
 	}
 
 }
