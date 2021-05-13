@@ -18,19 +18,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
 @RestController
 @RequestMapping("/api/empleado")
-@Api(value = "EmpleadoRest", description = "Permite gestionar los empleados")
 public class EmpleadoRest {
 	    
 	private static final List<Empleado> listaEmpleados = new ArrayList<Empleado>();
 	private static Integer ID_GEN = 1;
 
 	@PostMapping
-	@ApiOperation(value = "Crea un nuevo empleado")
 	public ResponseEntity<Empleado> crear(@RequestBody Empleado nuevo){
 	    System.out.println("Crear nuevo empleado: " + nuevo);
 	    nuevo.setId(ID_GEN++);
@@ -39,7 +34,6 @@ public class EmpleadoRest {
 	}
 
 	@PutMapping(path = "/{id}")
-	@ApiOperation(value = "Actualiza un empleado")
 	public ResponseEntity<Empleado> actualizar(@RequestBody Empleado nuevo, @PathVariable Integer id){
         OptionalInt indexOpt =   IntStream.range(0, listaEmpleados.size())
         		.filter(i -> listaEmpleados.get(i).getId().equals(id))
@@ -54,7 +48,6 @@ public class EmpleadoRest {
 	}
 
     @DeleteMapping(path = "/{id}")
-    @ApiOperation(value = "Borra un empleado por id")
     public ResponseEntity<Empleado> borrar(@PathVariable Integer id){
     	OptionalInt indexOpt =   IntStream.range(0, listaEmpleados.size())
     			.filter(i -> listaEmpleados.get(i).getId().equals(id))
@@ -69,8 +62,7 @@ public class EmpleadoRest {
 	}
 
 	@GetMapping(path="/{id}")
-    @ApiOperation(value = "Busca un empleado por id")
-	public ResponseEntity<Empleado> empleadoPorId(@PathVariable Integer id) {
+    public ResponseEntity<Empleado> empleadoPorId(@PathVariable Integer id) {
         OptionalInt indexOpt =   IntStream.range(0, listaEmpleados.size())
         		.filter(i -> listaEmpleados.get(i).getId().equals(id))
 	            .findFirst();
@@ -82,8 +74,7 @@ public class EmpleadoRest {
     }
 
 	@GetMapping
-    @ApiOperation( value = "Busca un empleado por nombre")
-	public ResponseEntity<Empleado> empleadoPorNombre(@RequestParam(required = false) String usuario) {
+   public ResponseEntity<Empleado> empleadoPorNombre(@RequestParam(required = false) String usuario) {
 		if ( usuario != null){
 	        OptionalInt indexOpt =   IntStream.range(0, listaEmpleados.size())
             .filter(i -> listaEmpleados.get(i).getUser().getUser().equals(usuario))

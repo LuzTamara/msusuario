@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.OptionalInt;
 import java.util.stream.IntStream;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,18 +18,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brikton.labapps.msusuario.domain.Obra;
-import io.swagger.annotations.Api;
+import com.brikton.labapps.msusuario.servicioInterfaz.ObraServicio;
 
 @RestController
 @RequestMapping("/api/obra")
-@Api(value = "ObraRest", description = "Permite gestionar las obras")
 public class ObraRest {
 	
-	 private static final List<Obra> listaObras = new ArrayList<Obra>();
-	 private static Integer ID_GEN = 1;
+	@Autowired
+	ObraServicio obraServicio;
 	 
 	 @PostMapping
-	    @ApiOperation(value = "Crea una nueva obra")
 	    public ResponseEntity<Obra> crear(@RequestBody Obra nueva){
 	        System.out.println("Crear nueva obra: " + nueva);
 	        nueva.setId(ID_GEN++);
@@ -37,8 +36,7 @@ public class ObraRest {
 	    }
 	 
 	    @PutMapping(path = "/{id}")
-	    @ApiOperation(value = "Actualiza una obra")
-	    public ResponseEntity<Obra> actualizar(@RequestBody Obra nueva, @PathVariable Integer id){
+	     public ResponseEntity<Obra> actualizar(@RequestBody Obra nueva, @PathVariable Integer id){
 	        OptionalInt indexOpt =   IntStream.range(0, listaObras.size())
 	        .filter(i -> listaObras.get(i).getId().equals(id))
 	        .findFirst();
@@ -52,8 +50,6 @@ public class ObraRest {
 	    }
 	    
 	    @DeleteMapping(path = "/{id}")
-	    @ApiOperation(value = "Borra una obra por su id")
-
 	    public ResponseEntity<Obra> borrar(@PathVariable Integer id){
 	        OptionalInt indexOpt =   IntStream.range(0, listaObras.size())
 	        .filter(i -> listaObras.get(i).getId().equals(id))
@@ -68,7 +64,6 @@ public class ObraRest {
 	    }
 	    
 	    @GetMapping(path="/{id}")
-	    @ApiOperation(value = "Obtiene una obra por id")
 	    public ResponseEntity<Obra> obraPorId(@PathVariable Integer id) {
 	        OptionalInt indexOpt =   IntStream.range(0, listaObras.size())
 	        .filter(i -> listaObras.get(i).getId().equals(id))
@@ -81,7 +76,6 @@ public class ObraRest {
 	    }
 	    
 	    @GetMapping
-	    @ApiOperation( value = "Obtiene obras por cuit y/o tipo de obra")
 	    public ResponseEntity<List<Obra>> obrasPorParametros(@RequestParam(required = false) String cliente, @RequestParam(required = false) String tipoObra) {
 	        ArrayList<Obra> obrasPorParametros = new ArrayList<>();
 	        obrasPorParametros.addAll(listaObras);
@@ -94,4 +88,3 @@ public class ObraRest {
 	        return ResponseEntity.ok(obrasPorParametros);
 	    }
 	}
-}
