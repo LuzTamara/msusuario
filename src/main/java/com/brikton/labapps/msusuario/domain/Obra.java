@@ -1,14 +1,31 @@
 package com.brikton.labapps.msusuario.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
+@Entity
 public class Obra {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
 	private String descripcion;
 	private Float latitud;
 	private Float longitud;
 	private String direccion;
 	private Integer superficie;
+	
+	@OneToOne
+	@JoinColumn(name="id")
 	private TipoObra tipo;
+	
+	@OneToMany(mappedBy="Obra")
 	private Cliente cliente;
 	
 	public Integer getId() {
