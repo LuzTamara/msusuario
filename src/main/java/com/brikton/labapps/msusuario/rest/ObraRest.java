@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brikton.labapps.msusuario.domain.Obra;
+import com.brikton.labapps.msusuario.domain.TipoObra;
 import com.brikton.labapps.msusuario.servicioInterfaz.ObraServicio;
 
 @RestController
@@ -42,8 +43,8 @@ public class ObraRest {
 	}
 	
 	@GetMapping(path="/tipoObra/{tipoObraId}")
-	public ResponseEntity<List<Obra>> todosFiltrado(@PathVariable Integer tipoObraId) {
-		 return ResponseEntity.ok(this.obraServicio.listarObras(tipoObraId));
+	public ResponseEntity<List<Obra>> todosFiltrado(@PathVariable String tipoObraId) {
+		 return ResponseEntity.ok(this.obraServicio.listarObras(TipoObra.valueOf(tipoObraId)));
 	}
 	 
 	 @PostMapping

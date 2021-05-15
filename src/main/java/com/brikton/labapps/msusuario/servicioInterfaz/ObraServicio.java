@@ -4,10 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import com.brikton.labapps.msusuario.domain.Obra;
+import com.brikton.labapps.msusuario.domain.TipoObra;
 
 public interface ObraServicio {
 	
-	List<Obra> listarObras(Integer tipoObraId);
+	List<Obra> listarObras(TipoObra tipoObraId);
 	
 	Optional<Obra> buscarObraPorId(Integer id) throws Exception;
 	

@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -20,12 +21,11 @@ public class Obra {
 	private Float longitud;
 	private String direccion;
 	private Integer superficie;
-	
-	@OneToOne
-	@JoinColumn(name="id")
 	private TipoObra tipo;
 	
-	@OneToMany(mappedBy="Obra")
+	//@OneToMany(mappedBy="Obra")
+	@ManyToOne
+	@JoinColumn(name = "id_cliente")
 	private Cliente cliente;
 	
 	public Integer getId() {

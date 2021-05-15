@@ -3,14 +3,15 @@ package com.brikton.labapps.msusuario.servicioImplementacion;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.brikton.labapps.msusuario.domain.Cliente;
 import com.brikton.labapps.msusuario.domain.Obra;
+import com.brikton.labapps.msusuario.domain.TipoObra;
 import com.brikton.labapps.msusuario.repositorios.ObraRepositorio;
 import com.brikton.labapps.msusuario.servicioInterfaz.ClienteServicio;
 import com.brikton.labapps.msusuario.servicioInterfaz.ObraServicio;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ObraServicioImplementacion implements ObraServicio {
@@ -20,7 +21,7 @@ public class ObraServicioImplementacion implements ObraServicio {
 	@Autowired
 	ObraRepositorio repositorio;
 	
-	public List<Obra> listarObras(Integer tipoObraId) {
+	public List<Obra> listarObras(TipoObra tipoObraId) {
 		if(tipoObraId == null) {
 			return this.repositorio.findAll();
 		} else {

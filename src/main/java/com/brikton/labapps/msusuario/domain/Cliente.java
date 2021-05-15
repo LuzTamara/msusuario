@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -24,8 +25,9 @@ public class Cliente {
 	private Date fechaBaja;
 	private Boolean habilitadoOnline;
 	
-	@ManyToOne
-	@JoinColumn(name = "id")
+	//@ManyToOne
+	//@JoinColumn(name = "id")
+	@OneToMany(mappedBy = "cliente")
 	private List<Obra> obras;
 	
 	@OneToOne
