@@ -57,17 +57,39 @@ public class ObraRest {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 			}
 			return ResponseEntity.ok(creada);
-	    }
+	  }
 	 
-	    @PutMapping(path = "/{id}")
-	     public ResponseEntity<?> actualizar(@RequestBody Obra nueva, 
+	  @PutMapping(path = "/{id}")
+	   public ResponseEntity<?> actualizar(@RequestBody Obra nueva, 
 	    		 @PathVariable Integer id){
-	    	Obra actualizada = null;
-			try {
-				actualizada = this.obraServicio.guardarObra(nueva, null);
-			} catch (Exception e) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		  Obra actualizada = null;
+		  try {
+			actualizada = this.obraServicio.guardarObra(nueva, null);
+		  } catch (Exception e) {
+			  return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 			}
 			return ResponseEntity.ok(actualizada);
+	    }
+	    
+	    @GetMapping(path = "/obrasPorCliente/{clienteId}")
+	    public ResponseEntity<?> obrasPorCliente(@PathVariable Integer clienteId) {
+	    	List<Obra> obras = null;
+	    	try {
+	    		obras = this.obraServicio.listarObrasPorCliente(clienteId);
+	    	} catch (Exception e) {
+	    		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+	    	}
+	    	return ResponseEntity.ok(obras);
+	    }
+	    
+	    @GetMapping(path = "/saldo/{obraId}")
+	    public ResponseEntity<?> saldoClienteDeObra(@PathVariable Integer obraId) {
+	    	Double saldo = null;
+	    	try {
+	    		saldo = this.obraServicio.buscarSaldoClienteDeObra(obraId);
+	    	} catch (Exception e) {
+	    		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+	    	}
+	    	return ResponseEntity.ok(saldo);
 	    }
 	}

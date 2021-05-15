@@ -14,8 +14,6 @@ public interface ObraRepositorio extends JpaRepository<Obra, Integer>{
 	
 	List<Obra> findAllByCliente(Cliente cliente);
 
-	// @Query("SELECT o from Obra o JOIN TipoObra to "
-	// 		+ "WHERE to.tipoObra = :tipoObra")
 	@Query("SELECT o FROM Obra o WHERE o.tipo = :tipoObra")
 	List<Obra> findAllByTipoObra(@Param("tipoObra") TipoObra tipoObra); 
 }
