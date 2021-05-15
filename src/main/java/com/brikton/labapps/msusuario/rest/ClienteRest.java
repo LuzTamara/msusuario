@@ -1,10 +1,7 @@
 package com.brikton.labapps.msusuario.rest;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
-import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -73,8 +70,8 @@ public class ClienteRest {
 		Cliente creado = null;
 		try {
 			creado = this.clienteServicio.guardarCliente(cliente);
-		} catch (Exception e1) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e1.getMessage());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
 		return ResponseEntity.ok(creado);
 	}
@@ -85,8 +82,8 @@ public class ClienteRest {
 		Cliente actualizado = null;
 		try {
 			actualizado = this.clienteServicio.guardarCliente(cliente);
-		} catch (Exception e1) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e1.getMessage());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
 		return ResponseEntity.ok(actualizado);
 	}
@@ -96,8 +93,8 @@ public class ClienteRest {
 	public ResponseEntity<?> borrar(@PathVariable Integer id) {
 		try {
 			this.clienteServicio.bajaCliente(id); 
-		} catch (Exception e1) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e1.getMessage());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
 		return ResponseEntity.ok().build();
 	}
