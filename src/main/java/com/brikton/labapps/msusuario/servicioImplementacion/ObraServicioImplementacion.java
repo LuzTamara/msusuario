@@ -37,21 +37,35 @@ public class ObraServicioImplementacion implements ObraServicio {
 		return o;
 	}
 	
+	// public Obra guardarObra(Obra o, Integer clienteId) throws Exception {
+	// 	Optional<Cliente> clienteBuscado = this.clienteServicio.buscarClientePorId(clienteId);
+	// 	if(clienteBuscado.isPresent()) {
+	// 		if(o.getId() != null && this.buscarObraPorId(o.getId()).isPresent() && clienteId == null) {
+	// 			this.repositorio.save(o);
+	// 		} else {
+	// 				clienteBuscado.get().agregarObra(o);
+	// 				o.setCliente(clienteBuscado.get());
+	// 				this.repositorio.save(o);
+	// 				this.clienteServicio.guardarCliente(clienteBuscado.get());
+	// 		} 
+	// 		return o;
+	// 	} else {
+	// 		throw new Exception("No se encontro el cliente con id "+ clienteId);
+	// 	}
+	// }
+
 	public Obra guardarObra(Obra o, Integer clienteId) throws Exception {
 		Optional<Cliente> clienteBuscado = this.clienteServicio.buscarClientePorId(clienteId);
-		if(clienteBuscado.isPresent()) {
-			if(o.getId() != null && this.buscarObraPorId(o.getId()).isPresent() && clienteId == null) {
-				this.repositorio.save(o);
-			} else {
-					clienteBuscado.get().agregarObra(o);
-					o.setCliente(clienteBuscado.get());
-					this.repositorio.save(o);
-					this.clienteServicio.guardarCliente(clienteBuscado.get());
-			} 
+
+		System.out.println("AAAAAAAA");
+		if (clienteBuscado.isPresent()){
+			System.out.println("askdfnlakjsdnfliadsuhfluadsh");
+			Cliente cliente = clienteBuscado.get();
+			cliente.agregarObra(o);
+			this.repositorio.save(o);
+			this.clienteServicio.guardarCliente(cliente);
 			return o;
-		} else {
-			throw new Exception();
-		}
+		} else throw new Exception("No se encontro el cliente con id "+clienteId);
 	}
 
 	public List<Obra> listarObrasPorCliente(Integer clienteId) throws Exception {

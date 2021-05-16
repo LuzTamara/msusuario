@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brikton.labapps.msusuario.domain.Obra;
@@ -47,12 +48,12 @@ public class ObraRest {
 		 return ResponseEntity.ok(this.obraServicio.listarObras(TipoObra.valueOf(tipoObraId)));
 	}
 	 
-	 @PostMapping
+	 @PostMapping(path = "/{id}")
 	    public ResponseEntity<?> crear(@RequestBody Obra nueva,
-	    								@PathVariable Integer clienteId){
+	    								@PathVariable Integer id){
 		 Obra creada = null;
 			try {
-				creada= this.obraServicio.guardarObra(nueva, clienteId);
+				creada= this.obraServicio.guardarObra(nueva, id);
 			} catch (Exception e) {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 			}

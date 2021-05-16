@@ -55,9 +55,9 @@ public Cliente guardarCliente(Cliente c) throws Exception {
 	if(c.getId() != null && this.buscarClientePorId(c.getId()).isPresent()) {
 		this.repositorio.save(c);
 	} else {
-		if(c.getObras().isEmpty()) {
-			throw new Exception();
-		}
+		// if(c.getObras().isEmpty()) {
+		// 	throw new Exception();
+		// }
 		Usuario u = new Usuario();
 		u.setUser(c.getMail());
 		u.setPassword("1234");
