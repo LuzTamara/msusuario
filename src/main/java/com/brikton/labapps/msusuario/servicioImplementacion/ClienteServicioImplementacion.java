@@ -34,6 +34,7 @@ public class ClienteServicioImplementacion implements ClienteServicio {
     @Override
     public Optional<Cliente> buscarClientePorCuit(String cuit) throws Exception {
         List<Cliente> clientes = this.repositorio.findByCuit(cuit);
+
         if (clientes.size() > 0) {
             return Optional.ofNullable(clientes.get(0));
         }
@@ -44,7 +45,7 @@ public class ClienteServicioImplementacion implements ClienteServicio {
     public Optional<Cliente> buscarClientePorRazonSocial(String razonSocial) throws Exception {
         Optional<Cliente> c = this.repositorio.findByRazonSocial(razonSocial);
         if (c.isEmpty() || c.get().getFechaBaja() != null)
-            throw new Exception();
+            throw new Exception("No existen clientes con la razón social " + razonSocial);
         return c;
     }
 

@@ -1,96 +1,103 @@
 package com.brikton.labapps.msusuario.rest;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.brikton.labapps.msusuario.domain.Obra;
 import com.brikton.labapps.msusuario.domain.TipoObra;
 import com.brikton.labapps.msusuario.servicioInterfaz.ObraServicio;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/obra")
 public class ObraRest {
-	
-	@Autowired
-	ObraServicio obraServicio;
-	
-	@GetMapping(path="/obra/{id}")
+
+    @Autowired
+    ObraServicio obraServicio;
+
+    @GetMapping(path = "/{id}")
     public ResponseEntity<?> obraPorId(@PathVariable Integer id) {
-        
-		Optional<Obra> obra = null;
-		try {
-			obra = this.obraServicio.buscarObraPorId(id);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-		}
-		return ResponseEntity.of(obra);
+        Optional<Obra> obra;
+        try {
+            obra = this.obraServicio.buscarObraPorId(id);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return ResponseEntity.of(obra);
     }
-	
-	@GetMapping
-	public ResponseEntity<List<Obra>> todos() {
-		 return ResponseEntity.ok(this.obraServicio.listarObras(null));
-	}
-	
-	@GetMapping(path="/tipoObra/{tipoObraId}")
-	public ResponseEntity<List<Obra>> todosFiltrado(@PathVariable String tipoObraId) {
-		 return ResponseEntity.ok(this.obraServicio.listarObras(TipoObra.valueOf(tipoObraId)));
-	}
-	 
-	 @PostMapping(path = "/{id}")
-	    public ResponseEntity<?> crear(@RequestBody Obra nueva,
-	    								@PathVariable Integer id){
-		 Obra creada = null;
-			try {
-				creada= this.obraServicio.guardarObra(nueva, id);
-			} catch (Exception e) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-			}
-			return ResponseEntity.ok(creada);
-	  }
-	 
-	  @PutMapping(path = "/{id}")
-	   public ResponseEntity<?> actualizar(@RequestBody Obra nueva, 
-	    		 @PathVariable Integer id){
-		  Obra actualizada = null;
-		  try {
-			actualizada = this.obraServicio.guardarObra(nueva, null);
-		  } catch (Exception e) {
-			  return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-			}
-			return ResponseEntity.ok(actualizada);
-	    }
-	    
-	    @GetMapping(path = "/obrasPorCliente/{clienteId}")
-	    public ResponseEntity<?> obrasPorCliente(@PathVariable Integer clienteId) {
-	    	List<Obra> obras = null;
-	    	try {
-	    		obras = this.obraServicio.listarObrasPorCliente(clienteId);
-	    	} catch (Exception e) {
-	    		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-	    	}
-	    	return ResponseEntity.ok(obras);
-	    }
-	    
-	    @GetMapping(path = "/saldo/{obraId}")
-	    public ResponseEntity<?> saldoClienteDeObra(@PathVariable Integer obraId) {
-	    	Double saldo = null;
-	    	try {
-	    		saldo = this.obraServicio.buscarSaldoClienteDeObra(obraId);
-	    	} catch (Exception e) {
-	    		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-	    	}
-	    	return ResponseEntity.ok(saldo);
-	    }
-	}
+
+    @GetMapping
+    public ResponseEntity<List<Obra>> todos() {
+        return ResponseEntity.ok(this.obraServicio.listarObras(null));
+    }
+
+    @GetMapping(path = "/tipoObra/{tipoObraId}")
+    public ResponseEntity<?> todosFiltrado(@PathVariable String tipoObraId) {
+        TipoObra tipoObra;
+        try {
+            tipoObra = TipoObra.valueOf(tipoObraId);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("El tipo de obra que se requiere no es válido. \nLos siguientes valores son válidos: \"REFORMA, CASA, EDIFICIO y VIAL\".");
+        }
+        return ResponseEntity.ok(this.obraServicio.listarObras(tipoObra));
+    }
+
+    @PostMapping
+    public ResponseEntity<?> crear(@RequestBody Obra nueva) {
+        Obra creada;
+        try {
+            creada = this.obraServicio.guardarObra(nueva);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return ResponseEntity.ok(creada);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> actualizar(@RequestBody Obra nueva) {
+        Obra actualizada;
+        try {
+            actualizada = this.obraServicio.guardarObra(nueva);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return ResponseEntity.ok(actualizada);
+    }
+
+    @GetMapping(path = "/obrasPorCliente/{clienteId}")
+    public ResponseEntity<?> obrasPorCliente(@PathVariable Integer clienteId) {
+        List<Obra> obras;
+        try {
+            obras = this.obraServicio.listarObrasPorCliente(clienteId);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return ResponseEntity.ok(obras);
+    }
+
+    @GetMapping(path = "/obrasPorCliente/cuit/{clienteCuit}")
+    public ResponseEntity<?> obrasPorClienteCuit(@PathVariable String clienteCuit) {
+        List<Obra> obras;
+        try {
+            obras = this.obraServicio.listarObrasPorCliente(clienteCuit);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return ResponseEntity.ok(obras);
+    }
+
+    @GetMapping(path = "/saldo/{obraId}")
+    public ResponseEntity<?> saldoClienteDeObra(@PathVariable Integer obraId) {
+        Double saldo;
+        try {
+            saldo = this.obraServicio.buscarSaldoClienteDeObra(obraId);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        return ResponseEntity.ok(saldo);
+    }
+}

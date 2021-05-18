@@ -19,7 +19,7 @@ public class Obra {
 	private Float longitud;
 	private String direccion;
 	private Integer superficie;
-	private TipoObra tipo;
+	private TipoObra tipoObra;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_cliente")
@@ -61,11 +61,11 @@ public class Obra {
 	public void setSuperficie(Integer superficie) {
 		this.superficie = superficie;
 	}
-	public TipoObra getTipo() {
-		return tipo;
+	public TipoObra getTipoObra() {
+		return tipoObra;
 	}
-	public void setTipo(TipoObra tipo) {
-		this.tipo = tipo;
+	public void setTipoObra(TipoObra tipo) {
+		this.tipoObra = tipo;
 	}
 	public Cliente getCliente() {
 		return cliente;

@@ -1,5 +1,7 @@
 package com.brikton.labapps.msusuario.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
+@JsonIgnoreProperties(value = { "obras" })
 public class Cliente {
 	
 	@Id

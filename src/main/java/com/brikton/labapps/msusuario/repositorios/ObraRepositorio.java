@@ -11,9 +11,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ObraRepositorio extends JpaRepository<Obra, Integer>{
-	
-	List<Obra> findAllByCliente(Cliente cliente);
 
-	@Query("SELECT o FROM Obra o WHERE o.tipo = :tipoObra")
+	@Query("SELECT o FROM Obra o WHERE o.cliente.id = :idCliente")
+	List<Obra> findAllByCliente(@Param("idCliente") Integer idCliente);
+
+	@Query("SELECT o FROM Obra o WHERE o.tipoObra = :tipoObra")
 	List<Obra> findAllByTipoObra(@Param("tipoObra") TipoObra tipoObra); 
 }
