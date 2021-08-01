@@ -3,19 +3,14 @@ package com.brikton.labapps.msusuario.domain;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity
 public class Cliente {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id_cliente")
 	private Integer id;
 	private String razonSocial;
 	private String cuit;
@@ -28,7 +23,7 @@ public class Cliente {
 	private List<Obra> obras;
 	
 	@OneToOne
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "id_usuario")
 	private Usuario usuario;
 	
 	public String getRazonSocial() {
@@ -85,4 +80,11 @@ public class Cliente {
 		this.obras.add(obra);
 	}
 
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 }
